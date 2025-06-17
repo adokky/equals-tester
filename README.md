@@ -1,22 +1,30 @@
-Tester for `equals()`, `hashCode()`, `compareTo`, `toString` methods of a class. Similar to [guava EqualsTester](https://www.javadoc.io/doc/com.google.guava/guava-testlib/21.0/com/google/common/testing/EqualsTester.html) but in pure Kotlin and with more advanced checks.
+Tester for `equals()`, `hashCode()`, `compareTo`, `toString` methods of a class. Similar to Guava [EqualsTester](https://www.javadoc.io/doc/com.google.guava/guava-testlib/21.0/com/google/common/testing/EqualsTester.html) but in pure Kotlin and with more advanced checks.
 
 Example:
 
-    testEquality {
-        group(User("alex"), User("alex"), User("alex"))
-        group(User("sergey"), User("sergey"))
+```kotlin
+testEquality {
+    group(User("alex"), User("alex"), User("alex"))
+    group(User("sergey"), User("sergey"))
 
-        // User("page") created multiple times (default is 3)
-        group { User("page") }
-    }
+    // User("page") created multiple times (default is 3).
+    // Can be changed via testEquality(defaultGroupSize = N).
+    group { User("page") }
+}
+```
 
 * Each group should contain objects that are equal to each other but unequal to the objects in any other group.
 * Adding more than one group is not required but strongly recommended.
 
+## Setup
+
+```kotlin
+implementation("io.github.adokky:equals-tester:0.11")
+```
+
 ## This tests
 
 Base:
-
 * comparing each object against itself returns true
 * comparing each object against null returns false
 * comparing each object against an instance of an incompatible class returns false

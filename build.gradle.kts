@@ -1,12 +1,12 @@
 plugins {
-    id("io.github.adokky.quick-mpp") version "0.9"
+    id("io.github.adokky.quick-mpp") version "0.11"
     signing
     `maven-publish`
     id("com.vanniktech.maven.publish") version "0.32.0"
 }
 
 group = "io.github.adokky"
-version = "0.1"
+version = "0.11"
 
 signing {
     useGpgCmd()
