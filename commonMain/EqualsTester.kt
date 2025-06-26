@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 /**
  * Note: there is no way to implement a one-sided equals() correctly with inheritance -

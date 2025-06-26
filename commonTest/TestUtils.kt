@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 import kotlin.test.assertFailsWith
 import kotlin.test.fail

@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 internal inline fun allPairs(range: IntRange, f: (Int, Int) -> Unit) {
     for (i in range) {

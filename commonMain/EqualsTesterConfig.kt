@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 interface EqualsTesterConfig {
     /** Require each equality group has no **identical** objects (equal by reference). `false` by default */

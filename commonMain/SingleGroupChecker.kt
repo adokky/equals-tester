@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 internal class SingleGroupChecker: PairTesterBase() {
     fun test(config: EqualsTesterConfigImpl, groupIndex: Int) {

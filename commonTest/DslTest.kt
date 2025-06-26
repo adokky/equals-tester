@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

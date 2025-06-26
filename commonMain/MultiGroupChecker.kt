@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 internal class MultiGroupChecker: PairTesterBase() {
     fun test(config: EqualsTesterConfigImpl) {

@@ -1,4 +1,7 @@
-Tester for `equals()`, `hashCode()`, `compareTo`, `toString` methods of a class. Similar to Guava [EqualsTester](https://www.javadoc.io/doc/com.google.guava/guava-testlib/21.0/com/google/common/testing/EqualsTester.html) but in pure Kotlin and with more advanced checks.
+Tester for `equals()`, `hashCode()`, `compareTo`, `toString` methods of a class. 
+Similar to Guava [EqualsTester][GuavaEqualsTester] but in pure Kotlin and with more advanced checks.
+
+  [GuavaEqualsTester]: https://www.javadoc.io/doc/com.google.guava/guava-testlib/21.0/com/google/common/testing/EqualsTester.html
 
 Example:
 

@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 internal abstract class PairTesterBase {
     protected lateinit var config: EqualsTesterConfigImpl

@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 import kotlin.random.Random
 import kotlin.test.Test

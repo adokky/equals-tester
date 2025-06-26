@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 abstract class BaseTest {
     protected fun <T: Any> test(vararg values: T) =

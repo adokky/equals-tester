@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 class EqualsTesterConfigBuilder internal constructor(private val defaultGroupSize: Int = DEFAULT_GROUP_SIZE): EqualsTesterConfig {
     internal val groups = ArrayList<List<Any>>()

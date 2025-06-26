@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 data class Box(val v: Int)
 

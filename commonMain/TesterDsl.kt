@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 fun EqualsTester.test(
     defaultGroupSize: Int = EqualsTesterConfigBuilder.DEFAULT_GROUP_SIZE,

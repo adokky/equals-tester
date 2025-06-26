@@ -1,4 +1,4 @@
-package dev.adokky
+package dev.adokky.eqtester
 
 internal class CollectionContractChecker: PairTesterBase() {
     fun test(config: EqualsTesterConfigImpl) {
