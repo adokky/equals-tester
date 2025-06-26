@@ -9,12 +9,12 @@ class EqualsTester {
     private val multiGroupChecker = MultiGroupChecker()
     private val collectionChecker = CollectionContractChecker()
 
-    fun testElements(element0: Any, element1: Any, vararg rest: Any) =
+    fun testElements(element0: Any, element1: Any, vararg rest: Any): Unit =
         testGroup(listOf(element0, element1) + rest)
 
-    fun testGroup(group: List<Any>) = test(EqualsTesterConfigImpl(listOf(group)))
+    fun testGroup(group: List<Any>): Unit = test(EqualsTesterConfigImpl(listOf(group)))
 
-    fun testGroups(group0: List<Any>, vararg rest: List<Any>) =
+    fun testGroups(group0: List<Any>, vararg rest: List<Any>): Unit =
         test(EqualsTesterConfigImpl(listOf(group0) + rest))
 
     fun test(config: EqualsTesterConfigImpl) {
