@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.adokky"
-version = "0.12"
+version = "0.13"
 
 mavenPublishing {
     pom {
