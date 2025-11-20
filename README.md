@@ -27,7 +27,7 @@ testEquality {
 ## Setup
 
 ```kotlin
-implementation("io.github.adokky:equals-tester:0.2")
+implementation("io.github.adokky:equals-tester:1.0")
 ```
 
 ## This tests
