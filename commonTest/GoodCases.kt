@@ -15,10 +15,10 @@ class GoodCases: BaseTest() {
     @Test
     fun non_comparable_full() {
         testEquality {
-            group(5) { Box(1) }
-            group(2) { Box(2) }
-            group(2) { Box(3) }
-            group(3) { Box(4) }
+            groupOfSize(5) { Box(1) }
+            groupOfSize(2) { Box(2) }
+            groupOfSize(2) { Box(3) }
+            groupOfSize(3) { Box(4) }
             checkToString = true
         }
     }
@@ -42,38 +42,41 @@ class GoodCases: BaseTest() {
     @Test
     fun multiple_groups() {
         testEquality {
-            group(2) { ComparableBox(1) }
-            group(1) { ComparableBox(2) }
-            group(3) { ComparableBox(3) }
+            groupOfSize(2) { ComparableBox(1) }
+            groupOfSize(1) { ComparableBox(2) }
+            groupOfSize(3) { ComparableBox(3) }
         }
     }
 
     @Test
     fun large_groups() {
-        testEquality {
-            groups(
-                (1..100)
+        EqualsTester().test(
+            EqualsTesterConfigImpl(
+                groups = (1..100)
                     .map { groupIndex -> randomGroup(groupIndex) }
                     .plusElement((1..1000).map { ComparableBox(101) })
+                    .map { TestGroup.Simple(it) },
+                maxIterations = 100_000
             )
-            maxIterations = 100_000
-        }
+        )
     }
 
     @Test
     fun cardinality_test() {
-        val groups: List<List<Any>> = (1..100)
+        val groups: List<TestGroup> = (1..100)
             .map { groupIndex -> randomGroup(groupIndex) }
             .plusElement((1..1000).map { ComparableBox(101) })
-        assertEquals(Long.MAX_VALUE, EqualsTesterConfigImpl(groups).totalCardinality())
+            .map { TestGroup.Simple(it) }
+
+        assertEquals(Long.MAX_VALUE, EqualsTesterConfigImpl(groups).aproximateIterations())
 
         assertEquals(3 * 3 * 2 * 1 * 3, EqualsTesterConfigImpl(
             listOf(
-                listOf(ComparableBox(1), ComparableBox(1)),
-                listOf(ComparableBox(2)),
-                listOf(ComparableBox(3), ComparableBox(3), ComparableBox(3))
+                TestGroup.Simple(listOf(ComparableBox(1), ComparableBox(1))),
+                TestGroup.Simple(listOf(ComparableBox(2))),
+                TestGroup.Simple(listOf(ComparableBox(3), ComparableBox(3), ComparableBox(3)))
             )
-        ).totalCardinality())
+        ).aproximateIterations())
     }
 
     private fun randomGroup(groupIndex: Int): List<ComparableBox> = (1..Random.nextInt(100, 1000)).map { ComparableBox(groupIndex) }

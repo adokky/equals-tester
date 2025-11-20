@@ -36,7 +36,7 @@ class MapContractTest {
 
     @Test
     fun ok() {
-        testEquality(defaultGroupSize = 2) {
+        testEquality {
             setup()
         }
     }
@@ -44,7 +44,7 @@ class MapContractTest {
     @Test
     fun invalid_hash_code() {
         assertFailsWithMessage<AssertionError>("Map.hashCode") {
-            testEquality(defaultGroupSize = 2) {
+            testEquality {
                 setup(buggyHash = true)
             }
         }
@@ -53,7 +53,7 @@ class MapContractTest {
     @Test
     fun invalid_equals() {
         assertFailsWithMessage<AssertionError>("Map.equals") {
-            testEquality(defaultGroupSize = 2) {
+            testEquality {
                 setup(buggyEquals = true)
             }
         }

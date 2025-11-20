@@ -27,7 +27,7 @@ class SetContractTest {
 
     @Test
     fun ok() {
-        testEquality(defaultGroupSize = 2) {
+        testEquality {
             group { BuggySet(setOf(45, 76, 22409)) }
             group { BuggySet(setOf(1)) }
             group { BuggySet(setOf(1, 2, 3)) }
@@ -37,7 +37,7 @@ class SetContractTest {
     @Test
     fun invalid_hash_code() {
         assertFailsWithMessage<AssertionError>("Set.hashCode") {
-            testEquality(defaultGroupSize = 2) {
+            testEquality {
                 group { BuggySet(setOf(45, 76, 22409), buggyHash = true) }
                 group { BuggySet(setOf(1), buggyHash = true) }
                 group { BuggySet(setOf(1, 2, 3), buggyHash = true) }
@@ -48,7 +48,7 @@ class SetContractTest {
     @Test
     fun invalid_equals() {
         assertFailsWithMessage<AssertionError>("Set.equals") {
-            testEquality(defaultGroupSize = 2) {
+            testEquality {
                 group { BuggySet(setOf(45, 76, 22409), buggyEquals = true) }
                 group { BuggySet(setOf(1), buggyEquals = true) }
                 group { BuggySet(setOf(1, 2, 3), buggyEquals = true) }

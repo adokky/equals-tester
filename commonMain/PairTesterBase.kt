@@ -44,14 +44,17 @@ internal abstract class PairTesterBase {
         require(groupIndex1 != -1) { "must select group first" }
     }
 
-    protected val group1: List<Any> get() = config.groups[groupIndex1]
-    protected val group2: List<Any> get() = config.groups[groupIndex2]
+    protected val group1: TestGroup get() = config.groups[groupIndex1]
+    protected val group2: TestGroup get() = config.groups[groupIndex2]
 
     protected val element1: Any get() = group1[elementIndex1]
     protected val element2: Any get() = group2[elementIndex2]
 
     protected val comparableOrNull1: Comparable<Any>? get() = comparableOrNull1(elementIndex1)
     protected val comparableOrNull2: Comparable<Any>? get() = comparableOrNull2(elementIndex2)
+
+    protected val groupName1: String get() = group1.name?.let { "'$it'" } ?: groupIndex1.toString()
+    protected val groupName2: String get() = group2.name?.let { "'$it'" } ?: groupIndex2.toString()
 
     @Suppress("UNCHECKED_CAST")
     protected fun comparableOrNull1(index: Int): Comparable<Any>? = group1[index] as? Comparable<Any>
@@ -64,12 +67,13 @@ internal abstract class PairTesterBase {
         body(cmp1, cmp2)
     }
 
-    object PrivateUnit
+    object ForeignObject
 
     protected fun failure(reason: String) {
         throw AssertionError(failureMessage(reason))
     }
 
+    // elements at index 0 of group 1, and index 2 of group 3 are equal
     protected fun failureMessage(reason: String): String = buildString {
         if (groupIndex1 == groupIndex2) {
             append(
@@ -82,10 +86,10 @@ internal abstract class PairTesterBase {
             )
 
             if (config.groups.size > 1) {
-                append(" of group $groupIndex1")
+                append(" of group $groupName1")
             }
         } else {
-            append("elements at index=$elementIndex1 of group=$groupIndex1 and index=$elementIndex2 of group=$groupIndex2")
+            append("elements at index=$elementIndex1 of group=$groupName1 and index=$elementIndex2 of group=$groupName2")
         }
 
         append(' ')

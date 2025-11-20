@@ -1,13 +1,25 @@
 package dev.adokky.eqtester
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
 
 class EqualityFailures: BaseTest() {
     @Test
     fun not_equal_objects_in_group() {
-        assertFailsWith<AssertionError> {
-            tester.testElements(ComparableBox(1), ComparableBox(2))
+        assertFailsWithMessage<AssertionError>("elements at index=0 and index=1 are not equal") {
+            tester.testElements(Hashed(1), Hashed(2, hash = 1))
+        }
+    }
+
+    @Test
+    fun dirty_hash_code() {
+        data class Dirty(val v: Int) {
+            var hashCode = v
+            override fun equals(other: Any?) = v.equals(other)
+            override fun hashCode() = hashCode++
+        }
+
+        assertFailsWithMessage<AssertionError>("element at index=0 has different hashCode() results on subsequent calls: 1 != 2") {
+            tester.testElements(Dirty(1), Dirty(1))
         }
     }
 
@@ -26,12 +38,12 @@ class EqualityFailures: BaseTest() {
 
     @Test
     fun equal_objects_in_groups() {
-        assertFailsWith<AssertionError> {
+        assertFailsWithMessage<AssertionError>("elements at index=0 of group=0 and index=0 of group='xyz' are equal") {
             testEquality {
-                group(2) { ComparableBox(1) }
-                group(1) { ComparableBox(2) }
-                group(1) { ComparableBox(1) }
-                group(3) { ComparableBox(3) }
+                groupOfSize(2) { ComparableBox(1) }
+                groupOfSize(1) { ComparableBox(2) }
+                namedGroup("xyz", 1) { ComparableBox(1) }
+                namedGroup("abc", ComparableBox(3), ComparableBox(3), ComparableBox(3))
             }
         }
     }
@@ -57,11 +69,11 @@ class EqualityFailures: BaseTest() {
         @Suppress("EqualsOrHashCode")
         data class Buggy(val v: Any) {
             override fun equals(other: Any?): Boolean {
-                if (other !is Buggy) return true
+                if (other != null && other !is Buggy) return true
                 return super.equals(other)
             }
         }
-        assertFailsWith<AssertionError> {
+        assertFailsWithMessage<AssertionError>("element at index=0 equals any unknown type") {
             tester.testElements(Buggy(1), Buggy(1))
         }
     }
@@ -75,14 +87,14 @@ class EqualityFailures: BaseTest() {
                 return super.equals(other)
             }
         }
-        assertFailsWith<AssertionError> {
+        assertFailsWithMessage<AssertionError>("element at index=0 equals to null") {
             tester.testElements(Buggy(1), Buggy(1))
         }
     }
 
     private class Hashed(val v: Any, val hash: Int = v.hashCode()) {
         override fun equals(other: Any?): Boolean {
-            other as? Hashed ?: return false
+            if (other !is Hashed) return false
             return other.v == v
         }
         override fun hashCode(): Int = hash
@@ -91,14 +103,7 @@ class EqualityFailures: BaseTest() {
 
     @Test
     fun hash_code_is_not_equal() {
-        assertFailsWith<AssertionError> {
-            tester.testElements(Hashed(1), Hashed(1), Hashed(1, hash = 177), Hashed(1))
-        }
-    }
-
-    @Test
-    fun hash_code_is_equal() {
-        assertFailsWith<AssertionError> {
+        assertFailsWithMessage<AssertionError>("elements at index=0 and index=2 have different hash code") {
             tester.testElements(Hashed(1), Hashed(1), Hashed(1, hash = 177), Hashed(1))
         }
     }

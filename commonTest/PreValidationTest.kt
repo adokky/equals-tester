@@ -14,7 +14,7 @@ class GroupTestPreValidation: BaseTest() {
     @Test
     fun empty_group() {
         assertFailsWith<IllegalArgumentException> {
-            tester.test(EqualsTesterConfigImpl(listOf(listOf(1), listOf())))
+            tester.test(EqualsTesterConfigImpl(listOf(TestGroup(1), TestGroup())))
         }
     }
 
@@ -40,7 +40,7 @@ class GroupTestPreValidation: BaseTest() {
         val box = ComparableBox(3)
         tester.test(
             EqualsTesterConfigImpl(
-                groups = listOf(listOf(ComparableBox(3), ComparableBox(3), box, box, ComparableBox(3))),
+                groups = listOf(TestGroup(ComparableBox(3), ComparableBox(3), box, box, ComparableBox(3))),
                 requireNonIdentical = false
             )
         )

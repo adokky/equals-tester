@@ -14,13 +14,13 @@ internal class SingleGroupChecker: PairTesterBase() {
         for (i in group1.indices) {
             setup(i)
 
-            if (element1.equals(null)) failure("equals to null: ${element1}")
+            if (element1.equals(null)) failure("equals to null: $element1")
 
-            if (element1 == PrivateUnit) failure("equals to foreign(unknown) type: ${element1}")
+            if (element1 == ForeignObject) failure("equals any unknown type: $element1")
 
             val hash1 = element1.hashCode()
             val hash2 = element1.hashCode()
-            if (hash1 != hash2) failure("return different hashCode(): $hash1, $hash2")
+            if (hash1 != hash2) failure("has different hashCode() results on subsequent calls: $hash1 != $hash2")
         }
 
         checkHashCodeEquality()
@@ -87,8 +87,8 @@ internal class SingleGroupChecker: PairTesterBase() {
 
     private fun checkObjectAreEquals() {
         if (element1 != element2 || element2 != element1) {
-            if (element2 != PrivateUnit) {
-                failure("are not equal, expected: <${element1}> got: <${element2}>\"")
+            if (element2 != ForeignObject) {
+                failure("are not equal, expected: <${element1}> got: <${element2}>")
             } else {
                 failure("not equal to itself: $element1")
             }

@@ -46,15 +46,15 @@ internal class CollectionContractChecker: PairTesterBase() {
     }
 
     private fun List<Any?>.isVerified(): Boolean =
-        this is ArrayList ||
-        this is ArrayDeque
+        this::class == ArrayList::class ||
+        this::class == ArrayDeque::class
 
     private fun Set<Any?>.isVerified(): Boolean =
-        this is HashSet ||
-        this is LinkedHashSet
+        this::class == HashSet::class ||
+        this::class == LinkedHashSet::class
 
     private fun Map<Any, Any>.isVerified(): Boolean =
-        this is HashMap ||
-        this is LinkedHashMap
+        this::class == HashMap::class ||
+        this::class == LinkedHashMap::class
 }
 

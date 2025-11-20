@@ -11,9 +11,10 @@ class DslTest {
         for (rid in arrayOf(true, false)) {
             val cfg = EqualsTesterConfigBuilder().apply {
                 group { 1 }
-                group(size = 5) { 2 }
+                groupOfSize(5) { 2 }
                 group { 3 }
                 group(4, 4, 4, 4, 4)
+                defaultGroupSize = 3
                 requireNonIdentical = rid
                 checkToString = tsc
                 maxIterations = 343
@@ -24,10 +25,10 @@ class DslTest {
             assertEquals(tsc, cfg.checkToString)
             assertEquals(
                 listOf(
-                    listOf(1, 1, 1),
-                    listOf(2, 2, 2, 2, 2),
-                    listOf(3, 3, 3),
-                    listOf(4, 4, 4, 4, 4),
+                    TestGroup(1, 1, 1),
+                    TestGroup(2, 2, 2, 2, 2),
+                    TestGroup(3, 3, 3),
+                    TestGroup(4, 4, 4, 4, 4),
                 ),
                 cfg.groups
             )
@@ -36,14 +37,15 @@ class DslTest {
 
     @Test
     fun config_default_group_size() {
-        val cfg = EqualsTesterConfigBuilder(defaultGroupSize = 2).apply {
+        val cfg = EqualsTesterConfigBuilder().apply {
             group { 1 }
-            group(size = 5) { 2 }
+            groupOfSize(5) { 2 }
+            defaultGroupSize = 4
         }.toConfig()
         assertEquals(
             listOf(
-                listOf(1, 1),
-                listOf(2, 2, 2, 2, 2),
+                TestGroup(1, 1, 1, 1),
+                TestGroup(2, 2, 2, 2, 2),
             ),
             cfg.groups
         )
@@ -54,8 +56,8 @@ class DslTest {
         testEquality {
             requireNonIdentical = false
             group { 1 }
-            group(size = 2) { 2 }
-            group(size = 5) { 3 }
+            groupOfSize(2) { 2 }
+            groupOfSize(5) { 3 }
         }
     }
 

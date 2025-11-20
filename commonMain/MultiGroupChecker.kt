@@ -6,7 +6,7 @@ internal class MultiGroupChecker: PairTesterBase() {
 
         if (config.groups.size <= 1) return
 
-        if (config.totalCardinality() > config.maxIterations) {
+        if (config.aproximateIterations() > config.maxIterations) {
             checkGroupsNotEqualProbabilistic(config.maxIterations)
             checkGroupsComparisonProbabilistic(config.maxIterations)
         } else {
@@ -38,7 +38,7 @@ internal class MultiGroupChecker: PairTesterBase() {
         if (element1 == element2) failure("are equal:\n${element1}\n${element2}")
         if (config.checkToString) {
             val s1 = element1.toString()
-            if (s1 == element2.toString()) failure("have identical toString():\n$s1")
+            if (s1 == element2.toString()) failure("have identical toString() results:\n$s1")
         }
     }
 
@@ -87,18 +87,18 @@ internal class MultiGroupChecker: PairTesterBase() {
             if (cmpRes == 0) throwCompareToIsZero()
 
             if (cmpRes != expectedDiff) throw AssertionError(
-                "group[$groupIndex1].elements[$elementIndex1].compareTo(group[$groupIndex2].elements[$elementIndex2]) !=" +
-                " group[$groupIndex1].elements[0].compareTo(group[$groupIndex2].elements[0]), ($expectedDiff != $cmpRes)"
+                "group[$groupName1].elements[$elementIndex1].compareTo(group[$groupName2].elements[$elementIndex2]) !=" +
+                " group[$groupName1].elements[0].compareTo(group[$groupName2].elements[0]), ($expectedDiff != $cmpRes)"
             )
         }
     }
 
     private fun throwCompareToIsZero(): Nothing = throw AssertionError(
-        "group[$groupIndex1].elements[$elementIndex1].compareTo(group[$groupIndex2].elements[$elementIndex2]) is zero"
+        "group[$groupName1].elements[$elementIndex1].compareTo(group[$groupName2].elements[$elementIndex2]) is zero"
     )
 
     private data class ComparableGroup(
-        val elements: List<Any>,
+        val elements: TestGroup,
         val comparable: Comparable<Any>,
         val index: Int
     ): Comparable<ComparableGroup> {
@@ -119,7 +119,7 @@ internal class MultiGroupChecker: PairTesterBase() {
             }
             .sorted()
 
-        val fullScan = config.totalCardinality() < config.maxIterations
+        val fullScan = config.aproximateIterations() < config.maxIterations
 
         for (i in sorted.indices) {
             val lessOrEqGroup = sorted[i]
@@ -160,7 +160,7 @@ internal class MultiGroupChecker: PairTesterBase() {
     }
 }
 
-internal fun EqualsTesterConfigImpl.totalCardinality(): Long {
+internal fun EqualsTesterConfigImpl.aproximateIterations(): Long {
     var result = groups.size.toLong() * groups.size
 
     for (g in groups) {

@@ -1,24 +1,75 @@
 package dev.adokky.eqtester
 
+/**
+ * Configuration interface for [EqualsTester].
+ *
+ * Defines behavior and constraints for equality testing, including group validation,
+ * performance limits, and additional contract checks.
+ *
+ * Instances are created via [EqualsTesterConfigBuilder] using the [testEquality] entry point.
+ *
+ * @see EqualsTester
+ * @see EqualsTesterConfigBuilder
+ * @see testEquality
+ */
 interface EqualsTesterConfig {
-    /** Require each equality group has no **identical** objects (equal by reference). `false` by default */
+    /**
+     * If enabled, the tester will throw an exception if any two objects within the same group
+     * are identical (reference-equal).
+     *
+     * Default: `false`.
+     *
+     * Useful for ensuring that `equals()` is tested with distinct but equivalent instances.
+     */
     val requireNonIdentical: Boolean
 
     /**
-     * Large number equality groups or large number of elements in equality groups may imply huge number of test iterations
-     * (non-linear grow, so may be effectively infinite).
+     * Maximum number of test iterations before switching to random sampling.
      *
-     * [EqualsTester] approximates number of such combinations and if it exceeds [maxIterations]
-     * then, instead of checking all combinations of elements from all groups, [EqualsTester] does random sampling.
-     * This setting limits the number of such random passes.
+     * Default: `1_000_000`.
      *
-     * You may consider reducing this number if you experience too long test runs.
+     * Large equality groups or many groups may result in a combinatorial explosion of checks.
+     * To prevent performance issues, if the number of combinations exceeds this limit,
+     * the tester will perform randomized checks instead of exhaustive ones.
+     *
+     * Lower this value if tests are too slow.
+     *
+     * @see EqualsTesterConfigBuilder.maxIterations
      */
     val maxIterations: Int
 
-    /** Require every object in each equality group has equivalent `toString()` result. `false` by default */
+    /**
+     * Whether to verify that all objects within a group have the same `toString()` result.
+     *
+     * Default: `false`.
+     */
     val checkToString: Boolean
 
-    /** Additional checks of [Map], [List], [Set] `hashCode()` and `equals()` contracts. `true` by default */
+    /**
+     * Whether to perform additional contract checks for collections like [List], [Set], and [Map].
+     * When enabled, the tester validates that `hashCode()` and `equals()` conform to the standard
+     * collection contracts (e.g., list equality based on element order,
+     * collection-specific hash code formulas).
+     *
+     * Default: `true`.
+     */
     val collectionContractCheck: Boolean
+
+    /**
+     * The default number of instances to generate per group when using factory-based group definitions.
+     *
+     * Default: `2`.
+     *
+     * Used by [EqualsTesterConfigBuilder.group] when no explicit size is provided.
+     *
+     * Example:
+     * ```
+     * testEquality {
+     *     defaultGroupSize = 3
+     *     group { User("alice") } // generates 3 instances
+     * }
+     * ```
+     * @see EqualsTesterConfigBuilder.group
+     */
+    val defaultGroupSize: Int
 }
