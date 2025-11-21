@@ -6,15 +6,15 @@ internal class MultiGroupChecker: PairTesterBase() {
 
         if (config.groups.size <= 1) return
 
-        if (config.aproximateIterations() > config.maxIterations) {
+        if (config.approximateIterations() > config.maxIterations) {
             checkGroupsNotEqualProbabilistic(config.maxIterations)
-            checkGroupsComparisonProbabilistic(config.maxIterations)
+            if (config.checkComparable) checkGroupsComparisonProbabilistic(config.maxIterations)
         } else {
             checkGroupsNotEqualTotal()
-            checkGroupsComparisonTotal()
+            if (config.checkComparable) checkGroupsComparisonTotal()
         }
 
-        checkOrderOfGroups()
+        if (config.checkComparable) checkOrderOfGroups()
     }
 
     private fun checkGroupsNotEqualProbabilistic(iterations: Int) = repeat(iterations) {
@@ -119,7 +119,7 @@ internal class MultiGroupChecker: PairTesterBase() {
             }
             .sorted()
 
-        val fullScan = config.aproximateIterations() < config.maxIterations
+        val exhaustive = config.approximateIterations() < config.maxIterations
 
         for (i in sorted.indices) {
             val lessOrEqGroup = sorted[i]
@@ -127,7 +127,7 @@ internal class MultiGroupChecker: PairTesterBase() {
                 val greaterOrEqGroup = sorted[j]
                 selectGroups(lessOrEqGroup.index, greaterOrEqGroup.index)
                 val pairSize = lessOrEqGroup.elements.size + greaterOrEqGroup.elements.size
-                if (fullScan || pairSize < 10) {
+                if (exhaustive || pairSize < 10) {
                     checkGroupPairOrderTotal()
                 } else {
                     // (totalElements / pairSize) = (maxIterations / iterations)
@@ -160,7 +160,7 @@ internal class MultiGroupChecker: PairTesterBase() {
     }
 }
 
-internal fun EqualsTesterConfigImpl.aproximateIterations(): Long {
+internal fun EqualsTesterConfigImpl.approximateIterations(): Long {
     var result = groups.size.toLong() * groups.size
 
     for (g in groups) {

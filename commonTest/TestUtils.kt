@@ -13,3 +13,15 @@ inline fun <reified T: Throwable> assertFailsWithMessage(fragment: String, body:
         msg.prependIndent("    ")
     )
 }
+
+fun testCollectionContract(expectedErrorFrament: String, setup: EqualsTesterConfigBuilder.() -> Unit) {
+    assertFailsWithMessage<AssertionError>(expectedErrorFrament) {
+        testEquality {
+            setup()
+        }
+    }
+    testEquality {
+        setup()
+        checkCollectionContracts = false
+    }
+}

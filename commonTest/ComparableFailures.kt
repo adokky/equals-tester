@@ -10,6 +10,31 @@ class ComparableFailures: BaseTest() {
         }
     }
 
+    private class MgBuggy(v: Int, val bug: Boolean = false): BaseComparableBox<MgBuggy>(v) {
+        override fun compareTo(other: MgBuggy): Int {
+            if (bug && other.v == 3) return 0
+            return super.compareTo(other)
+        }
+    }
+
+    @Test
+    fun single_group_kill_switch() {
+        testEquality {
+            group(Comp(1), Comp(1), Comp(1, constCmp = 1), Comp(1))
+            checkComparable = false
+        }
+    }
+
+    @Test
+    fun multi_group_kill_switch() {
+        testEquality {
+            group { MgBuggy(1) }
+            group ( MgBuggy(2), MgBuggy(2, bug = true))
+            group { MgBuggy(3) }
+            checkComparable = false
+        }
+    }
+
     @Test
     fun compareTo_is_not_zero() {
         assertFailsWithMessage<AssertionError>(
@@ -48,40 +73,26 @@ class ComparableFailures: BaseTest() {
 
     @Test
     fun compare_two_groups_is_zero() {
-        class Buggy(v: Int, val bug: Boolean = false): BaseComparableBox<Buggy>(v) {
-            override fun compareTo(other: Buggy): Int {
-                if (bug && other.v == 3) return 0
-                return super.compareTo(other)
-            }
-        }
-
         assertFailsWithMessage<AssertionError>(
             "group[1].elements[1].compareTo(group[2].elements[0]) is zero")
         {
             tester.testGroups(
-                listOf(Buggy(1), Buggy(1), Buggy(1)),
-                listOf(Buggy(2), Buggy(2, bug = true), Buggy(2)),
-                listOf(Buggy(3), Buggy(3), Buggy(3))
+                listOf(MgBuggy(1), MgBuggy(1), MgBuggy(1)),
+                listOf(MgBuggy(2), MgBuggy(2, bug = true), MgBuggy(2)),
+                listOf(MgBuggy(3), MgBuggy(3), MgBuggy(3))
             )
         }
     }
 
     @Test
     fun probabilistic() {
-        class Buggy(v: Int, val bug: Boolean = false): BaseComparableBox<Buggy>(v) {
-            override fun compareTo(other: Buggy): Int {
-                if (bug && other.v == 3) return 0
-                return super.compareTo(other)
-            }
-        }
-
         assertFailsWithMessage<AssertionError>(" is zero") {
             tester.testGroups(
-                (1..100).map { Buggy(1) },
-                (1..100).map { Buggy(2) },
-                (1..100).map { Buggy(3) },
-                (1..30).map { Buggy(5) } + Buggy(5, bug = true) + (1..10).map { Buggy(5) },
-                (1..100).map { Buggy(6) },
+                (1..100).map { MgBuggy(1) },
+                (1..100).map { MgBuggy(2) },
+                (1..100).map { MgBuggy(3) },
+                (1..30).map { MgBuggy(5) } + MgBuggy(5, bug = true) + (1..10).map { MgBuggy(5) },
+                (1..100).map { MgBuggy(6) },
             )
         }
     }

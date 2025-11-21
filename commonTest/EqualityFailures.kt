@@ -53,14 +53,21 @@ class EqualityFailures: BaseTest() {
         class Buggy(v: Int, val ts: Int = v): BaseBox(v) {
             override fun toString() = ts.toString()
         }
+        fun EqualsTesterConfigBuilder.setup() {
+            group(Buggy(1), Buggy(1))
+            group { Buggy(2) }
+            group { Buggy(4) }
+            group(Buggy(3), Buggy(3, ts = 2), Buggy(3))
+        }
         assertFailsWithMessage<AssertionError>("toString") {
             tester.test {
-                group(Buggy(1), Buggy(1))
-                group { Buggy(2) }
-                group { Buggy(4) }
-                group(Buggy(3), Buggy(3, ts = 2), Buggy(3))
+                setup()
                 checkToString = true
             }
+        }
+        tester.test {
+            setup()
+            checkToString = false
         }
     }
 

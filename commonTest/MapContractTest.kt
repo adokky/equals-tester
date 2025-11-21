@@ -43,19 +43,16 @@ class MapContractTest {
 
     @Test
     fun invalid_hash_code() {
-        assertFailsWithMessage<AssertionError>("Map.hashCode") {
-            testEquality {
-                setup(buggyHash = true)
-            }
+        testCollectionContract("Map.hashCode") {
+            setup(buggyHash = true)
         }
     }
 
     @Test
     fun invalid_equals() {
-        assertFailsWithMessage<AssertionError>("Map.equals") {
-            testEquality {
-                setup(buggyEquals = true)
-            }
+        testCollectionContract("Map.equals") {
+            setup(buggyEquals = true)
         }
     }
 }
+

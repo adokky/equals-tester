@@ -41,7 +41,7 @@ internal class SingleGroupChecker: PairTesterBase() {
         selectElements(i1, i2)
 
         checkObjectAreEquals()
-        checkComparable()
+        if (config.checkComparable) checkComparable()
         checkToString()
     }
 

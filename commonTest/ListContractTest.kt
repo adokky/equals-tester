@@ -36,23 +36,19 @@ class ListContractTest {
 
     @Test
     fun invalid_hash_code() {
-        assertFailsWithMessage<AssertionError>("List.hashCode") {
-            testEquality {
-                group { BuggyList(listOf(45, 76, 22409), buggyHash = true) }
-                group { BuggyList(listOf(1), buggyHash = true) }
-                group { BuggyList(listOf(1, 2, 3), buggyHash = true) }
-            }
+        testCollectionContract("List.hashCode") {
+            group { BuggyList(listOf(45, 76, 22409), buggyHash = true) }
+            group { BuggyList(listOf(1), buggyHash = true) }
+            group { BuggyList(listOf(1, 2, 3), buggyHash = true) }
         }
     }
 
     @Test
     fun invalid_equals() {
-        assertFailsWithMessage<AssertionError>("List.equals") {
-            testEquality {
-                group { BuggyList(listOf(45, 76, 22409), buggyEquals = true) }
-                group { BuggyList(listOf(1), buggyEquals = true) }
-                group { BuggyList(listOf(1, 2, 3), buggyEquals = true) }
-            }
+        testCollectionContract("List.equals") {
+            group { BuggyList(listOf(45, 76, 22409), buggyEquals = true) }
+            group { BuggyList(listOf(1), buggyEquals = true) }
+            group { BuggyList(listOf(1, 2, 3), buggyEquals = true) }
         }
     }
 }

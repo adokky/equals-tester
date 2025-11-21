@@ -26,7 +26,7 @@ interface EqualsTesterConfig {
     /**
      * Maximum number of test iterations before switching to random sampling.
      *
-     * Default: `1_000_000`.
+     * Default: `100_000`.
      *
      * Large equality groups or many groups may result in a combinatorial explosion of checks.
      * To prevent performance issues, if the number of combinations exceeds this limit,
@@ -53,7 +53,17 @@ interface EqualsTesterConfig {
      *
      * Default: `true`.
      */
-    val collectionContractCheck: Boolean
+    val checkCollectionContracts: Boolean
+
+    /**
+     * Whether to perform additional contract checks for [Comparable] types.
+     * When enabled, the tester validates that `compareTo()` is consistent with `equals()`
+     * and adheres to the general contract of comparison (e.g., sign symmetry, transitivity).
+     *
+     * Default: `true`.
+     * @see Comparable
+     */
+    val checkComparable: Boolean
 
     /**
      * The default number of instances to generate per group when using factory-based group definitions.
@@ -66,7 +76,10 @@ interface EqualsTesterConfig {
      * ```
      * testEquality {
      *     defaultGroupSize = 3
-     *     group { User("alice") } // generates 3 instances
+     *
+     *     group { User("Alex") }
+     *     // will be the same as
+     *     group(User("Alex"), User("Alex"), User("Alex"))
      * }
      * ```
      * @see EqualsTesterConfigBuilder.group

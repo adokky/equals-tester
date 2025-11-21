@@ -68,7 +68,7 @@ class GoodCases: BaseTest() {
             .plusElement((1..1000).map { ComparableBox(101) })
             .map { TestGroup.Simple(it) }
 
-        assertEquals(Long.MAX_VALUE, EqualsTesterConfigImpl(groups).aproximateIterations())
+        assertEquals(Long.MAX_VALUE, EqualsTesterConfigImpl(groups).approximateIterations())
 
         assertEquals(3 * 3 * 2 * 1 * 3, EqualsTesterConfigImpl(
             listOf(
@@ -76,7 +76,7 @@ class GoodCases: BaseTest() {
                 TestGroup.Simple(listOf(ComparableBox(2))),
                 TestGroup.Simple(listOf(ComparableBox(3), ComparableBox(3), ComparableBox(3)))
             )
-        ).aproximateIterations())
+        ).approximateIterations())
     }
 
     private fun randomGroup(groupIndex: Int): List<ComparableBox> = (1..Random.nextInt(100, 1000)).map { ComparableBox(groupIndex) }

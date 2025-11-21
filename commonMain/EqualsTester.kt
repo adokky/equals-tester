@@ -60,7 +60,7 @@ class EqualsTester {
             singleGroupChecker.test(config, groupIndex)
         }
 
-        if (config.collectionContractCheck) {
+        if (config.checkCollectionContracts) {
             collectionChecker.test(config)
         }
 
